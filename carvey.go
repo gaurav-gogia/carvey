@@ -8,8 +8,6 @@ import (
 	"path/filepath"
 )
 
-var count int64
-
 const DST = "./pics"
 
 func main() {
@@ -17,6 +15,8 @@ func main() {
 		fmt.Println("Usage: carvy <filepath>")
 		os.Exit(1)
 	}
+
+	fmt.Println("Carving PNG files .....")
 
 	_, err := os.Stat(DST)
 	if os.IsNotExist(err) {
@@ -132,11 +132,10 @@ func carvePng(dstPath string, read *os.File, size int64) error {
 }
 
 func writecarved(dstPath, ext string, data *[]byte) error {
-	name := dstPath + getimgname(10) + "." + ext
+	name := filepath.Join(dstPath, getimgname(10)+"."+ext)
 	if err := os.WriteFile(name, *data, 0644); err != nil {
 		return err
 	}
-	count++
 	_, fname := filepath.Split(name)
 	fmt.Printf("\rImage file found: %s", fname)
 	return nil
